@@ -1,4 +1,6 @@
 class NumberToKab {
+    ZERO = 'зыри';
+
     DIGITS = {
         1: 'зы',
         2: 'тIу',
@@ -90,6 +92,10 @@ class NumberToKab {
     }
 
     translate() {
+        if (this.number === '0') {
+            return this.ZERO;
+        }
+
         let result = this._translate_triad(this.number % 1000);
 
         let triads = this._split_for_triads();
@@ -146,7 +152,7 @@ class NumberToKab {
         triad = Math.floor(triad / 100);
         if (triad > 0) {
             let hundreds = this.HUNDREDS[triad];
-            ten || digit ? result = hundreds + 'рэ ' + result : hundreds + result;
+            ten || digit ? result = hundreds + 'рэ ' + result : result = hundreds + result;
         }
         return result;
     }
