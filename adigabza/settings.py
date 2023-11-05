@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'kab_numerals.apps.KabNumeralsConfig',
+    'kab_alphabet.apps.KabAlphabetConfig',
 ]
 
 MIDDLEWARE = [
