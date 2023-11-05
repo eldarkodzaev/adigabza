@@ -6,7 +6,7 @@
             </a>
         {% endif %}
 
-        {% for p in paginator.page_range %}
+        {% for p in paginator_range %}
             {% if page_obj.number == p %}
                 <a class="Pagination-element Pagination-element_current" href="#">
                     <span class="Pagination-text">{{ page_obj.number }}</span>

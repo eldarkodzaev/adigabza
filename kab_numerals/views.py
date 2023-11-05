@@ -1,4 +1,4 @@
-from django.core.paginator import InvalidPage
+from django.core.paginator import InvalidPage, Page
 from django.http import Http404
 from django.utils.translation import gettext as _
 from django.views.generic import ListView
@@ -23,6 +23,8 @@ class KabNumeralsListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        page: Page = context['page_obj']
+        context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
         context['numeral_form'] = NumeralForm()
         context['numeral_range_form'] = NumeralRangeForm()
         context['full_path'] = self._remove_unnecessary_page_parameters()
