@@ -23,17 +23,17 @@ class KabNumeralsListView(ListView):
     def _get_params(self):
         try:
             from_ = abs(int(self.request.GET.get('from_')))
-        except ValueError:
+        except (ValueError, TypeError):
             from_ = 1
 
         try:
             to = abs(int(self.request.GET.get('to')))
-        except ValueError:
+        except (ValueError, TypeError):
             to = 100
 
         try:
             step = int(self.request.GET.get('step'))
-        except ValueError:
+        except (ValueError, TypeError):
             step = 1
 
         return {'from_': from_, 'to': to, 'step': step}

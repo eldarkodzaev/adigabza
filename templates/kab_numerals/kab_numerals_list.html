@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     Числительные
@@ -10,10 +11,12 @@
     <form method="get">
         {{ numeral_form.as_p }}
     </form>
+    <h3 class="translate"></h3>
     <h2>Перевод нескольких чисел</h2>
     <form action="{% url 'numerals' %}" method="get">
         {{ numeral_range_form.as_p }}
         <input type="submit" value="Получить">
     </form>
     {% include 'kab_numerals/numbers_table.html' %}
+    <script type="text/javascript" src="{% static 'js/kab_numerals_translator.js' %}"></script>
 {% endblock %}
