@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Числительные
+{% endblock %}
+
+{% block content %}
+    <h1>Числительные</h1>
+    <h2>Перевод одного числа</h2>
+    <form method="get">
+        {{ numeral_form.as_p }}
+    </form>
+    <h3 class="translate"></h3>
+    <h2>Перевод нескольких чисел</h2>
+    <form action="{% url 'numerals' %}" method="get">
+        {{ numeral_range_form.as_p }}
+        <input type="submit" value="Получить">
+    </form>
+    {% include 'kab_numerals/numbers_table.html' %}
+    {% include 'kab_numerals/pagination.html' %}
+    <script type="text/javascript" src="{% static 'js/kab_numerals_translator.js' %}"></script>
+{% endblock %}

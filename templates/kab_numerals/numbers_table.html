@@ -1,0 +1,14 @@
+{% if numbers %}
+    <table border="1">
+    <tr>
+        <th>Число</th>
+        <th>Перевод</th>
+    </tr>
+    {% for number in numbers %}
+        <tr>
+            <td>{{ number.number }}</td>
+            <td>{{ number.translate_decimal }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endif %}
