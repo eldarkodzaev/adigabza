@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'kab_numerals.apps.KabNumeralsConfig',
     'kab_alphabet.apps.KabAlphabetConfig',
+    'kab_dictionary.apps.KabDictionaryConfig',
 ]
 
 MIDDLEWARE = [
