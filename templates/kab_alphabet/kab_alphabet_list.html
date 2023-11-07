@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Алфавит
+{% endblock %}
+
+{% block content %}
+    <h1>Алфавит</h1>
+    <ul>
+        {% for letter in alphabet %}
+            <li><a href="{{ letter.get_absolute_url }}">{{ letter }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
