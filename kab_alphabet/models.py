@@ -14,4 +14,4 @@ class KabLetter(models.Model):
         return self.letter
 
     def get_absolute_url(self):
-        return reverse('kab_alphabet:kab_letter', kwargs={'slug': self.slug})
+        return reverse('kab_alphabet:letter', kwargs={'pk': self.pk})
