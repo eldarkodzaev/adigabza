@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ word }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ word }}</h1>
+    {% for translation in translations_list %}
+        <p>{{ translation.translation }}</p>
+        <p>{{ translation.description }}</p>
+    {% endfor %}
+
+    <p>Категория: {{ word.category }}</p>
+    <p>Часть речи: {{ word.category }}</p>
+    <p>Заимствовано из: {{ word.category }}</p>
+    <p>Источник: {{ word.category }}</p>
+{% endblock %}
