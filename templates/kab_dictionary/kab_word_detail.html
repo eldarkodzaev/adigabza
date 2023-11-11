@@ -9,10 +9,12 @@
     {% for translation in translations_list %}
         <p>{{ translation.translation }}</p>
         <p>{{ translation.description }}</p>
+        <span>Категории: </span>
+        {% for category in translation.categories.all %}
+            <span>{{ category }} </span>
+        {% endfor %}
+        <p>Часть речи: {{ translation.part_of_speech }}</p>
+        <p>Заимствовано из: {{ translation.word.borrowed_from.name }}</p>
+        <p>Источник: {{ translation.source.author }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>
     {% endfor %}
-
-    <p>Категория: {{ word.category }}</p>
-    <p>Часть речи: {{ word.category }}</p>
-    <p>Заимствовано из: {{ word.category }}</p>
-    <p>Источник: {{ word.category }}</p>
 {% endblock %}

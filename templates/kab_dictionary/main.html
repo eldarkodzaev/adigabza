@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Кабардино-черкесско-русский словарь
+{% endblock %}
+
+{% block content %}
+    <h1>Кабардино-черкесско-русский словарь</h1>
+    <h1>Адыгэ-урыс псалъалъэ</h1>
+    <form method="get">
+        {{ form.word }}
+        <input type="submit" value="Найти">
+    </form>
+
+    {% if words %}
+        <ul>
+            {% for word in words %}
+                <a href="{{ word.word.get_absolute_url }}">{{ word }}</a>
+                <p>{{ word.translation }}</p>
+                {% if word.description %}
+                    <p>{{ word.description }}</p>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>По Вашему запросу ничего не найдено</p>
+    {% endif %}
+    {% include 'kab_numerals/../pagination.html' %}
+{% endblock %}
