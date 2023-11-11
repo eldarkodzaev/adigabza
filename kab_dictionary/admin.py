@@ -24,7 +24,8 @@ class TranslationAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'slug', 'parent']
+    prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(PartOfSpeech)

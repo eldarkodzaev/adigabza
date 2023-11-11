@@ -63,6 +63,7 @@ class Category(MPTTModel):
     Модель категории, к которой относится слово
     """
     name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, db_index=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
@@ -74,6 +75,9 @@ class Category(MPTTModel):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('kab_rus_dictionary:category_detail', kwargs={'slug': self.slug})
 
 
 class PartOfSpeech(models.Model):
