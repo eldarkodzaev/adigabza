@@ -15,7 +15,8 @@ class KabWordDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['translations_list'] = self.object.translations.all()
+        context['translations_list'] = self.object.translations.select_related(
+            'source', 'word__borrowed_from', 'part_of_speech')
         return context
 
 

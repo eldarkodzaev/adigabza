@@ -8,14 +8,14 @@ from .utils import normalize_string
 
 
 class KabWord(models.Model):
+    """
+    Модель слова
+    """
     word = models.CharField(max_length=100, db_index=True, unique=True)
     slug = models.CharField(max_length=100, db_index=True, unique=True)
     letter = models.ForeignKey(KabLetter, on_delete=models.PROTECT, related_name='words')
-    same_word = models.ForeignKey('KabWord', on_delete=models.CASCADE, null=True, blank=True)
-    category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True, default=None)
-    part_of_speech = models.ForeignKey('PartOfSpeech', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
-    loan_word = models.CharField(max_length=50, null=True, blank=True, default=None)
-    source = models.ForeignKey('Source', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True, default=None)
+    borrowed_from = models.ForeignKey('Language', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None,
+                                      related_name='words')
 
     class Meta:
         ordering = ('letter__id', 'word',)
@@ -33,8 +33,16 @@ class KabWord(models.Model):
 
 
 class Translation(models.Model):
+    """
+    Модель хранящая перевод, описание и прочую информацию о слове
+    """
     word = models.ForeignKey(KabWord, on_delete=models.CASCADE, related_name='translations')
-    translation = models.CharField(max_length=500)
+    categories = models.ManyToManyField('Category')
+    part_of_speech = models.ForeignKey('PartOfSpeech', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True,
+                                       default=None)
+    source = models.ForeignKey('Source', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True,
+                               default=None)
+    translation = models.TextField()
     description = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -51,6 +59,9 @@ class Translation(models.Model):
 
 
 class Category(MPTTModel):
+    """
+    Модель категории, к которой относится слово
+    """
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
@@ -66,6 +77,9 @@ class Category(MPTTModel):
 
 
 class PartOfSpeech(models.Model):
+    """
+    Модель части речи, к которой относится слово
+    """
     name = models.CharField(max_length=30)
 
     class Meta:
@@ -78,10 +92,26 @@ class PartOfSpeech(models.Model):
 
 
 class Source(models.Model):
+    """
+    Модель источника информации определенного слова
+    """
     name = models.CharField(max_length=300)
     author = models.CharField(max_length=200)
     year = models.PositiveIntegerField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+
+class Language(models.Model):
+    """
+    Модель языка. Используется для указания факта заимствования слова из этого языка.
+    """
+    name = models.CharField(max_length=30)
 
     class Meta:
         ordering = ('name',)
