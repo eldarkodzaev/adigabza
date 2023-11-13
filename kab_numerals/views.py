@@ -19,7 +19,7 @@ class KabNumeralsListView(ListView):
     def get_queryset(self):
         params = self._get_params()
         return KabNaturalNumber.objects.only(
-            'number', 'translate_decimal')[params['from_']:params['to'] + 1:params['step']]
+            'number', 'translate_decimal')[params['from']:params['to'] + 1:params['step']]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,7 +27,6 @@ class KabNumeralsListView(ListView):
         context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
         context['numeral_form'] = NumeralForm()
         context['numeral_range_form'] = NumeralRangeForm()
-        context['full_path'] = self._remove_unnecessary_page_parameters()
         return context
 
     def paginate_queryset(self, queryset, page_size):
@@ -48,27 +47,18 @@ class KabNumeralsListView(ListView):
 
     def _get_params(self):
         try:
-            from_ = abs(int(self.request.GET.get('from_')))
+            start = abs(int(self.request.GET.get('start')))
         except (ValueError, TypeError):
-            from_ = 1
+            start = 1
 
         try:
-            to = abs(int(self.request.GET.get('to')))
+            end = abs(int(self.request.GET.get('end')))
         except (ValueError, TypeError):
-            to = 100
+            end = 100
 
         try:
             step = int(self.request.GET.get('step'))
         except (ValueError, TypeError):
             step = 1
 
-        return {'from_': from_, 'to': to, 'step': step}
-
-    def _remove_unnecessary_page_parameters(self) -> str:
-        """
-        Удаляет лишние GET-параметры 'page' из URL
-        :return: Строка с одним GET-параметром 'page'
-        """
-        full_path: str = self.request.get_full_path()
-        result: str = f"{full_path[:full_path.find('&page')]}{full_path[full_path.rfind('&page'):]}"
-        return result
+        return {'from': start, 'to': end, 'step': step}
