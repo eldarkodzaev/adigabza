@@ -2,7 +2,7 @@
     <div class="Pagination-ins">
         {% if page_obj.has_previous %}
             <a class="Pagination-element Pagination-element_prev"
-               href="{{ full_path }}&page={{ page_obj.previous_page_number }}">
+               {% block previous_page_full_path %}{% endblock %}>
             </a>
         {% endif %}
 
@@ -16,7 +16,7 @@
                     <span class="Pagination-text">{{ p }}</span>
                 {% else %}
                     <a class="Pagination-element"
-                       href="{{ full_path }}&page={{ p }}">
+                       {% block page_full_path %}{% endblock %}>
                         <span class="Pagination-text">{{ p }}</span>
                     </a>
                 {% endif %}
@@ -25,7 +25,7 @@
 
         {% if page_obj.has_next %}
             <a class="Pagination-element Pagination-element_prev"
-               href="{{ full_path }}&page={{ page_obj.next_page_number }}">
+               {% block next_page_full_path %}{% endblock %}>
             </a>
         {% endif %}
     </div>

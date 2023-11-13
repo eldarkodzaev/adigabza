@@ -1,5 +1,5 @@
 from paginators.paginator import AdigabzaPaginator
 
 
-class NumeralsPaginator(AdigabzaPaginator):
+class DictionaryPaginator(AdigabzaPaginator):
     pass
