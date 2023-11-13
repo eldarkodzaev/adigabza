@@ -12,7 +12,7 @@ class KabWord(models.Model):
     Модель слова
     """
     word = models.CharField(max_length=100, db_index=True, unique=True)
-    slug = models.CharField(max_length=100, db_index=True, unique=True)
+    slug = models.SlugField(max_length=100, db_index=True, unique=True)
     letter = models.ForeignKey(KabLetter, on_delete=models.PROTECT, related_name='words')
     borrowed_from = models.ForeignKey('Language', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None,
                                       related_name='words')
@@ -38,8 +38,8 @@ class Translation(models.Model):
     """
     word = models.ForeignKey(KabWord, on_delete=models.CASCADE, related_name='translations')
     categories = models.ManyToManyField('Category')
-    part_of_speech = models.ForeignKey('PartOfSpeech', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True,
-                                       default=None)
+    part_of_speech = models.ForeignKey('PartOfSpeech', on_delete=models.SET_DEFAULT, related_name='words', null=True,
+                                       blank=True, default=None)
     source = models.ForeignKey('Source', on_delete=models.SET_DEFAULT, related_name='words', null=True, blank=True,
                                default=None)
     translation = models.TextField()
@@ -62,7 +62,7 @@ class Category(MPTTModel):
     """
     Модель категории, к которой относится слово
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 

@@ -5,7 +5,7 @@ from django.views.generic.edit import FormMixin
 
 from .models import KabWord, Translation, Category
 from .forms import KabWordSearchForm
-from kab_numerals.paginators import NumeralsPaginator
+from .paginators import DictionaryPaginator
 
 
 class KabWordDetailView(DetailView):
@@ -25,7 +25,7 @@ class KabRusDictionaryView(FormMixin, ListView):
     template_name = 'kab_dictionary/main.html'
     form_class = KabWordSearchForm
     context_object_name = 'words'
-    paginator_class = NumeralsPaginator
+    paginator_class = DictionaryPaginator
     paginate_by = 10
     paginate_orphans = 3
 
@@ -33,12 +33,12 @@ class KabRusDictionaryView(FormMixin, ListView):
         word_param = self.request.GET.get('word')
         if word_param:
             return Translation.objects.select_related('word').filter(word__word__icontains=word_param)
+        return Translation.objects.select_related('word')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         page: Page = context['page_obj']
         context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
-        context['full_path'] = self.request.get_full_path()
         if self.object_list:
             context['translations_count'] = self.object_list.all().count()
         return context
@@ -51,5 +51,6 @@ class CategoryDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['words'] = Translation.objects.filter(categories__slug__contains=self.object.slug).select_related('word')
+        context['words'] = Translation.objects.filter(
+            categories__slug__contains=self.object.slug).select_related('word')
         return context
