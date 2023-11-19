@@ -5,16 +5,21 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ word }}</h1>
-    {% for translation in translations_list %}
+    <h1>{{ content_json.word }}</h1>
+    {% for translation in content_json.translations %}
+        {{ forloop.counter }})
         <p>{{ translation.translation }}</p>
         <p>{{ translation.description }}</p>
-        <span>Категории: </span>
-        {% for category in translation.categories.all %}
-            <span>{{ category }} </span>
-        {% endfor %}
+        {% if translation.categories %}
+            <span>Категории: </span>
+            {% for category in translation.categories %}
+                <span>{{ category }} </span>
+            {% endfor %}
+        {% endif %}
         <p>Часть речи: {{ translation.part_of_speech }}</p>
-        <p>Заимствовано из: {{ translation.word.borrowed_from.name }}</p>
-        <p>Источник: {{ translation.source.author }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>
+        {% if content_json.borrowed_from %}
+            <p>Заимствовано из: {{ content_json.borrowed_from }}</p>
+        {% endif %}
+        {#        <p>Источник: {{ translation.source }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>#}
     {% endfor %}
 {% endblock %}

@@ -1,10 +1,11 @@
+import requests
 from django.core.paginator import Page
-from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import FormMixin
 
-from .models import KabWord, Translation, Category
+from adigabza.settings import API_HOST
 from .forms import KabWordSearchForm
+from .models import KabWord, Translation, Category
 from .paginators import DictionaryPaginator
 
 
@@ -15,8 +16,9 @@ class KabWordDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['translations_list'] = self.object.translations.select_related(
-            'source', 'word__borrowed_from', 'part_of_speech')
+        response = requests.get(f'{API_HOST}kab-rus-dictionary/{self.object.slug}/')
+        content_json = response.json()
+        context['content_json'] = content_json
         return context
 
 
@@ -29,18 +31,13 @@ class KabRusDictionaryView(FormMixin, ListView):
     paginate_by = 10
     paginate_orphans = 3
 
-    def get_queryset(self):
-        word_param = self.request.GET.get('word')
-        if word_param:
-            return Translation.objects.select_related('word').filter(word__word__icontains=word_param)
-        return Translation.objects.select_related('word')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        response = requests.get(f'{API_HOST}kab-rus-dictionary/')
+        content_json = response.json()
+        context['content_json'] = content_json['results']
         page: Page = context['page_obj']
         context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
-        if self.object_list:
-            context['translations_count'] = self.object_list.all().count()
         return context
 
 

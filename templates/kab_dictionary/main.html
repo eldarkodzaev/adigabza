@@ -7,23 +7,19 @@
 {% block content %}
     <h1>Кабардино-черкесско-русский словарь</h1>
     <h1>Адыгэ-урыс псалъалъэ</h1>
+
     <form method="get">
         {{ form.word }}
         <input type="submit" value="Найти">
     </form>
 
-    {% if words %}
-        <ul>
-            {% for word in words %}
-                <a href="{{ word.word.get_absolute_url }}">{{ word }}</a>
-                <p>{{ word.translation }}</p>
-                {% if word.description %}
-                    <p>{{ word.description }}</p>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>По Вашему запросу ничего не найдено</p>
-    {% endif %}
+    {% for word in content_json %}
+        <a href="{{ word.word.url }}">{{ word.word.word }}</a>
+        <p>{{ word.translation }}</p>
+        {% if word.description %}
+            <p>{{ word.description }}</p>
+        {% endif %}
+    {% endfor %}
+
     {% include 'kab_dictionary/pagination.html' %}
 {% endblock %}
