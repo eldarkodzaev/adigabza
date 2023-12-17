@@ -2,7 +2,7 @@
 {% load query_transform %}
 
 {% block previous_page_full_path %}
-    href="?{% query_transform page=page_obj.previous_page_number %}"
+    href="?{% query_transform page=paginator.page.previous_page_number %}"
 {% endblock %}
 
 {% block page_full_path %}
@@ -10,5 +10,5 @@
 {% endblock %}
 
 {% block next_page_full_path %}
-    href="?{% query_transform page=page_obj.next_page_number %}"
+    href="?{% query_transform page=paginator.page.next_page_number %}"
 {% endblock %}

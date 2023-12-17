@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mptt',
     'debug_toolbar',
 
     'kab_numerals.apps.KabNumeralsConfig',
@@ -134,4 +135,4 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-API_HOST = 'http://127.0.0.1:8000/api/'
+API_HOST = 'http://127.0.0.1:8000/api/v1/'

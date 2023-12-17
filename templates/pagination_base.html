@@ -1,18 +1,18 @@
 <div class="Pagination">
     <div class="Pagination-ins">
-        {% if page_obj.has_previous %}
+        {% if paginator.page.has_previous %}
             <a class="Pagination-element Pagination-element_prev"
                {% block previous_page_full_path %}{% endblock %}>
             </a>
         {% endif %}
 
-        {% for p in paginator_range %}
-            {% if page_obj.number == p %}
+        {% for p in paginator.page_range %}
+            {% if paginator.page.number == p %}
                 <a class="Pagination-element Pagination-element_current" href="#">
-                    <span class="Pagination-text">{{ page_obj.number }}</span>
+                    <span class="Pagination-text">{{ paginator.page.number }}</span>
                 </a>
             {% else %}
-                {% if p == page_obj.paginator.ELLIPSIS %}
+                {% if p == paginator.ELLIPSIS %}
                     <span class="Pagination-text">{{ p }}</span>
                 {% else %}
                     <a class="Pagination-element"
@@ -23,7 +23,7 @@
             {% endif %}
         {% endfor %}
 
-        {% if page_obj.has_next %}
+        {% if paginator.page.has_next %}
             <a class="Pagination-element Pagination-element_prev"
                {% block next_page_full_path %}{% endblock %}>
             </a>
