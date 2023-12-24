@@ -1,3 +1,5 @@
+from typing import List
+
 import requests
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
