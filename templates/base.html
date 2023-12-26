@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
     <nav>
+        <a href="{% url 'main' %}">Главная</a>
         <a href="{% url 'kab_alphabet:alphabet' %}">Алфавит</a>
         <a href="{% url 'numerals' %}">Числительные</a>
         <a href="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}">Словарь</a>

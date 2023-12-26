@@ -15,11 +15,11 @@ class AlphabetListView(TemplateView):
         return context
 
 
-# class LetterDetailView(TemplateView):
-#     template_name = 'kab_alphabet/kab_letter_detail.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['words_count'] = KabWord.objects.filter(letter=self.object).count()
-#         context['words'] = KabWord.objects.filter(letter=self.object)
-#         return context
+class LetterDetailView(TemplateView):
+    template_name = 'kab_alphabet/kab_letter_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        response = requests.get(f'{API_HOST}{APP_PATH}{context["slug"]}/')
+        context['letter'] = response.json()
+        return context

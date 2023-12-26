@@ -1,7 +1,7 @@
 {% extends 'pagination_base.html' %}
 
 {% block previous_page_full_path %}
-    href="?page={{ page_obj.previous_page_number }}"
+    href="?page={{ links.previous }}"
 {% endblock %}
 
 {% block page_full_path %}
@@ -9,5 +9,5 @@
 {% endblock %}
 
 {% block next_page_full_path %}
-    href="?page={{ page_obj.next_page_number }}"
+    href="?page={{ links.next }}"
 {% endblock %}

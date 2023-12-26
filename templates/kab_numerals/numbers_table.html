@@ -1,10 +1,10 @@
-{% if numbers %}
+{% if numerals %}
     <table border="1">
     <tr>
         <th>Число</th>
         <th>Перевод</th>
     </tr>
-    {% for number in numbers %}
+    {% for number in numerals.results %}
         <tr>
             <td>{{ number.number }}</td>
             <td>{{ number.translate_decimal }}</td>

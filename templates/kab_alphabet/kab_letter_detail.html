@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ letter|capfirst }} {{ letter }}</h1>
+    <h1>{{ letter.letter|capfirst }} {{ letter.letter }}</h1>
     <p>{{ letter.id }} буква кабардино-черкесского алфавита</p>
     {% if letter.is_vowel %}
         <p>Гласная</p>

@@ -6,5 +6,5 @@ app_name = 'kab_alphabet'
 
 urlpatterns = [
     path('', AlphabetListView.as_view(), name='alphabet'),
-    path('<int:pk>/', LetterDetailView.as_view(), name='letter'),
+    path('<slug:slug>/', LetterDetailView.as_view(), name='letter'),
 ]

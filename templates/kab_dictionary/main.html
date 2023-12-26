@@ -13,7 +13,7 @@
         <input type="submit" value="Найти">
     </form>
 
-    {% for word in content_json %}
+    {% for word in words %}
         <a href="{{ word.word.url }}">{{ word.word.word }}</a>
         <p>{{ word.translation }}</p>
         {% if word.description %}

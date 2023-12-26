@@ -1,0 +1,12 @@
+<ul>
+    {% for child in children %}
+	    <li>
+            <a href="{{ child.url }}">{{ child.name }}</a>
+        </li>
+        {% with child.children as children %}
+            {% if children %}
+                {% include 'kab_dictionary/category_children.html' %}
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+</ul>

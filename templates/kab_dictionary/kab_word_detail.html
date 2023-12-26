@@ -1,25 +1,29 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ word }}
+    {{ word.word }}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ content_json.word }}</h1>
-    {% for translation in content_json.translations %}
-        {{ forloop.counter }})
-        <p>{{ translation.translation }}</p>
-        <p>{{ translation.description }}</p>
-        {% if translation.categories %}
-            <span>Категории: </span>
-            {% for category in translation.categories %}
-                <span>{{ category }} </span>
-            {% endfor %}
-        {% endif %}
-        <p>Часть речи: {{ translation.part_of_speech }}</p>
-        {% if content_json.borrowed_from %}
-            <p>Заимствовано из: {{ content_json.borrowed_from }}</p>
-        {% endif %}
-        {#        <p>Источник: {{ translation.source }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>#}
+    <h1>{{ word.word }}</h1>
+    {% for translation in word.translations %}
+	<div>
+            {{ forloop.counter }})
+            <p>{{ translation.translation }}</p>
+	    {% if translation.description %}
+	        <p> {{ translation.description }} </p>
+	    {% endif %}
+            {% if translation.categories %}
+                <span>Категории: </span>
+                {% for category in translation.categories %}
+                    <a href="{{ category.url }}">{{ category.name }}</a>
+                {% endfor %}
+            {% endif %}
+            <p>Часть речи: {{ translation.part_of_speech.name }}</p>
+            {% if word.borrowed_from %}
+                <p>Заимствовано из: {{ word.borrowed_from.name }}</p>
+            {% endif %}
+            {#        <p>Источник: {{ translation.source }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>#}
+	</div>
     {% endfor %}
 {% endblock %}
