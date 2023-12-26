@@ -8,6 +8,6 @@ class NumeralForm(forms.Form):
 
 
 class NumeralRangeForm(forms.Form):
-    from_ = forms.IntegerField(min_value=MIN_NUMERAL, max_value=MAX_NUMERAL, initial=1)
-    to = forms.IntegerField(min_value=MIN_NUMERAL, max_value=MAX_NUMERAL, initial=100)
+    start = forms.IntegerField(min_value=MIN_NUMERAL, max_value=MAX_NUMERAL, initial=1)
+    end = forms.IntegerField(min_value=MIN_NUMERAL, max_value=MAX_NUMERAL, initial=100)
     step = forms.IntegerField(min_value=1, initial=1)

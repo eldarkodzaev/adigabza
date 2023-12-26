@@ -5,6 +5,11 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    <nav>
+        <a href="{% url 'kab_alphabet:alphabet' %}">Алфавит</a>
+        <a href="{% url 'numerals' %}">Числительные</a>
+        <a href="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}">Словарь</a>
+    </nav>
     {% block content %}{% endblock %}
 </body>
 </html>

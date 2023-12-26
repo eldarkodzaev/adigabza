@@ -1,32 +1,14 @@
-<div class="Pagination">
-    <div class="Pagination-ins">
-        {% if page_obj.has_previous %}
-            <a class="Pagination-element Pagination-element_prev"
-               href="{{ full_path }}&page={{ page_obj.previous_page_number }}">
-            </a>
-        {% endif %}
+{% extends 'pagination_base.html' %}
+{% load query_transform %}
 
-        {% for p in paginator_range %}
-            {% if page_obj.number == p %}
-                <a class="Pagination-element Pagination-element_current" href="#">
-                    <span class="Pagination-text">{{ page_obj.number }}</span>
-                </a>
-            {% else %}
-                {% if p == page_obj.paginator.ELLIPSIS %}
-                    <span class="Pagination-text">{{ p }}</span>
-                {% else %}
-                    <a class="Pagination-element"
-                       href="{{ full_path }}&page={{ p }}">
-                        <span class="Pagination-text">{{ p }}</span>
-                    </a>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+{% block previous_page_full_path %}
+    href="?{% query_transform page=page_obj.previous_page_number %}"
+{% endblock %}
 
-        {% if page_obj.has_next %}
-            <a class="Pagination-element Pagination-element_prev"
-               href="{{ full_path }}&page={{ page_obj.next_page_number }}">
-            </a>
-        {% endif %}
-    </div>
-</div>
+{% block page_full_path %}
+    href="?{% query_transform page=p %}"
+{% endblock %}
+
+{% block next_page_full_path %}
+    href="?{% query_transform page=page_obj.next_page_number %}"
+{% endblock %}
