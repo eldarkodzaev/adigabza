@@ -13,12 +13,16 @@
         <p>Согласная</p>
     {% endif %}
 
-    {% if words_count > 0 %}
-        <h2>Слова, начинающиеся с этой буквы ({{ words_count }}):</h2>
-        <ul>
-            {% for word in words %}
-                <li><a href="{{ word.get_absolute_url }}">{{ word }}</a></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% with letter.words as words %}
+        {% with words|length as words_count %}
+            {% if words_count > 0 %}
+                <h2>Слова, начинающиеся с этой буквы ({{ words_count }}):</h2>
+                <ul>
+                    {% for word in words %}
+                        <li><a href="{{ word.url }}">{{ word.word }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    {% endwith %}
 {% endblock %}
