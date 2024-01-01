@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block bootstrap5_content %}
+    <div class="container">
+    	<ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main' %}">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'kab_alphabet:alphabet' %}">Алфавит</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'numerals' %}">Числительные</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}">Словарь</a>
+            </li>
+        </ul>
+        <h1 class="text-center">Адыгэбзэ</h1>
+    </div>
+{% endblock %}
