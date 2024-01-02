@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'mptt',
     'debug_toolbar',
+    'django_bootstrap5',
 
     'kab_numerals.apps.KabNumeralsConfig',
     'kab_alphabet.apps.KabAlphabetConfig',
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -135,4 +136,4 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-API_HOST = 'http://127.0.0.1:8000/api/v1/'
+API_HOST = 'http://127.0.0.1:8001/api/v1/'

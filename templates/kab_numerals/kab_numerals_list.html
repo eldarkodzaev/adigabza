@@ -1,23 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load django_bootstrap5 %}
 
 {% block title %}
     Числительные
 {% endblock %}
 
-{% block content %}
-    <h1>Числительные</h1>
-    <h2>Перевод одного числа</h2>
-    <form method="get">
-        {{ numeral_form.as_p }}
-    </form>
-    <h3 class="translate"></h3>
-    <h2>Перевод нескольких чисел</h2>
-    <form action="{% url 'numerals' %}" method="get">
-        {{ numeral_range_form.as_p }}
-        <input type="submit" value="Получить">
-    </form>
-    {% include 'kab_numerals/numbers_table.html' %}
-    {% include 'kab_numerals/pagination.html' %}
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1 class="text-center">Числительные</h1>
+
+        <h2>Перевод одного числа</h2>
+        <form method="get">
+            {% bootstrap_form numeral_form %}
+            <button type="button" class="btn btn-primary" onclick="copyToClipboard()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                </svg>
+                Копировать
+            </button>
+        </form>
+
+        <h2>Перевод нескольких чисел</h2>
+        <form action="{% url 'numerals' %}" method="get">
+            {% bootstrap_form numeral_range_form %}
+            {% bootstrap_button 'Получить' %}
+        </form>
+
+        {% include 'kab_numerals/numbers_table.html' %}
+        {% include 'kab_numerals/pagination.html' %}
+    </div>
     <script type="text/javascript" src="{% static 'js/kab_numerals_translator.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/copy_to_clipboard.js' %}"></script>
 {% endblock %}

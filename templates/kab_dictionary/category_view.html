@@ -5,9 +5,12 @@
     Категория :: {{ response.category }}
 {% endblock %}
 
-{% block content %}
-    <h1>Категория: {{ response.category  }}</h1>
-    {% for word in words %}
-        <p><a href="{{ word.word.url }}">{{ word.word.word }}</a></p>
-    {% endfor %}
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>Категория: {{ response.category  }}</h1>
+        {% for word in words %}
+            <p><a href="{{ word.word.url }}">{{ word.word.word }}</a></p>
+        {% endfor %}
+    </div>
 {% endblock %}

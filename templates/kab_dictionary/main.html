@@ -1,25 +1,35 @@
 {% extends 'base.html' %}
 
+{% load django_bootstrap5 %}
+
 {% block title %}
     Кабардино-черкесско-русский словарь
 {% endblock %}
 
-{% block content %}
-    <h1>Кабардино-черкесско-русский словарь</h1>
-    <h1>Адыгэ-урыс псалъалъэ</h1>
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
+        <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
 
-    <form method="get">
-        {{ form.word }}
-        <input type="submit" value="Найти">
-    </form>
+        <form class="row row-cols-lg-auto align-items-center" method="get">
+            {% bootstrap_form form layout="inline" %}
+            {% bootstrap_button "Найти" %}
+        </form>
 
-    {% for word in words %}
-        <a href="{{ word.word.url }}">{{ word.word.word }}</a>
-        <p>{{ word.translation }}</p>
-        {% if word.description %}
-            <p>{{ word.description }}</p>
-        {% endif %}
-    {% endfor %}
+        <ul class="list-group list-group-flush">
+            {% for word in words %}
+                <li class="list-group-item">
+                    <a href="{{ word.word.url }}">{{ word.word.word }}</a>
+                    <p>{{ word.translation }}</p>
+                    {% if word.description %}
+                        <p>{{ word.description }}</p>
+                    {% endif %}
+                    {% endfor %}
+                </li>
+        </ul>
 
-    {% include 'kab_dictionary/pagination.html' %}
+
+        {% include 'kab_dictionary/pagination.html' %}
+    </div>
 {% endblock %}
