@@ -4,26 +4,30 @@
     {{ word.word }}
 {% endblock %}
 
-{% block content %}
-    <h1>{{ word.word }}</h1>
-    {% for translation in word.translations %}
-	<div>
-            {{ forloop.counter }})
-            <p>{{ translation.translation }}</p>
-	    {% if translation.description %}
-	        <p> {{ translation.description }} </p>
-	    {% endif %}
-            {% if translation.categories %}
-                <span>Категории: </span>
-                {% for category in translation.categories %}
-                    <a href="{{ category.url }}">{{ category.name }}</a>
-                {% endfor %}
-            {% endif %}
-            <p>Часть речи: {{ translation.part_of_speech.name }}</p>
-            {% if word.borrowed_from %}
-                <p>Заимствовано из: {{ word.borrowed_from.name }}</p>
-            {% endif %}
-            {#        <p>Источник: {{ translation.source }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>#}
-	</div>
-    {% endfor %}
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>{{ word.word }}</h1>
+
+        <ul class="list-group list-group-flush">
+            {% for translation in word.translations %}
+                <li class="list-group-item">
+                    <p>{{ translation.translation }}</p>
+                    {% if translation.description %}
+                        <p> {{ translation.description }} </p>
+                    {% endif %}
+                    {% if translation.categories %}
+                        <span>Категории: </span>
+                        {% for category in translation.categories %}
+                            <a href="{{ category.url }}">{{ category.name }}</a>
+                        {% endfor %}
+                    {% endif %}
+                    <p>Часть речи: {{ translation.part_of_speech.name }}</p>
+                    {% if word.borrowed_from %}
+                        <p>Заимствовано из: {{ word.borrowed_from.name }}</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
