@@ -45,6 +45,10 @@ class KabRusDictionaryView(FormMixin, TemplateView):
             page_obj = paginator.get_page(page)
             context['page_obj'] = page_obj
             context['paginator_range'] = paginator.get_elided_page_range(page_obj.number, on_each_side=5)
+        response = requests.get(f'{API_HOST}{APP_PATH}categories/')
+        response_json = response.json()
+        context['response'] = response_json
+        context['categories_list'] = response_json['results']
         return context
 
 

@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load django_bootstrap5 %}
 
 {% block title %}
     Кабардино-черкесско-русский словарь
 {% endblock %}
 
+{% block bootstrap5_extra_head %}
+    <link href="{% static 'css/sidebars.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block bootstrap5_content %}
     <div class="container">
+        {% include 'kab_dictionary/categories_sidebar.html' %}
         {% include 'menu.html' %}
         <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
         <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
