@@ -12,7 +12,7 @@
         <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
         <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
 
-        <form class="row row-cols-lg-auto align-items-center" method="get">
+        <form action="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}" class="row row-cols-lg-auto align-items-center" method="get">
             {% bootstrap_form form layout="inline" %}
             {% bootstrap_button "Найти" %}
         </form>
@@ -28,7 +28,6 @@
                     {% endfor %}
                 </li>
         </ul>
-
 
         {% include 'kab_dictionary/pagination.html' %}
     </div>

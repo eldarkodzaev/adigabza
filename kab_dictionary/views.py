@@ -1,5 +1,3 @@
-from typing import List
-
 import requests
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
@@ -33,13 +31,20 @@ class KabRusDictionaryView(FormMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if page := self.request.GET.get('page'):
-            response = requests.get(f'{API_HOST}{APP_PATH}?page={page}')
-            context['words'] = response.json()['results']
+        if word := self.request.GET.get('word'):
+            response = requests.get(f'{API_HOST}{APP_PATH}?word={word}')
+            context['words'] = response.json()
         else:
-            context['words'] = requests.get(f'{API_HOST}{APP_PATH}?page=1').json()['results']
-        paginator = Paginator(object_list=self.__words, per_page=PAGINATION_PER_PAGE)
-        context['paginator'] = paginator
+            if page := self.request.GET.get('page'):
+                response = requests.get(f'{API_HOST}{APP_PATH}?page={page}')
+                context['words'] = response.json()['results']
+            else:
+                context['words'] = requests.get(f'{API_HOST}{APP_PATH}?page=1').json()['results']
+            paginator = Paginator(object_list=self.__words, per_page=PAGINATION_PER_PAGE)
+            context['paginator'] = paginator
+            page_obj = paginator.get_page(page)
+            context['page_obj'] = page_obj
+            context['paginator_range'] = paginator.get_elided_page_range(page_obj.number, on_each_side=5)
         return context
 
 
