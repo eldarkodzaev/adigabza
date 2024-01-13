@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -136,4 +136,4 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-API_HOST = 'http://127.0.0.1:8001/api/v1/'
+API_HOST = 'http://127.0.0.1:8000/api/v1/'

@@ -12,29 +12,35 @@
 {% endblock %}
 
 {% block bootstrap5_content %}
-    <div class="container">
-        {% include 'kab_dictionary/categories_sidebar.html' %}
+    <div class="container-fluid">
         {% include 'menu.html' %}
-        <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
-        <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
+        <div class="row flex-xl-nowrap">
+            {% include 'kab_dictionary/categories_sidebar.html' %}
+            <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
+                <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
 
-        <form action="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}" class="row row-cols-lg-auto align-items-center" method="get">
-            {% bootstrap_form form layout="inline" %}
-            {% bootstrap_button "Найти" %}
-        </form>
+                <form action="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}" class="row row-cols-lg-auto align-items-center" method="get">
+                    {% bootstrap_form form layout="inline" %}
+                    {% bootstrap_button "Найти" %}
+                </form>
 
-        <ul class="list-group list-group-flush">
-            {% for word in words %}
-                <li class="list-group-item">
-                    <a href="{{ word.word.url }}">{{ word.word.word }}</a>
-                    <p>{{ word.translation }}</p>
-                    {% if word.description %}
-                        <p>{{ word.description }}</p>
-                    {% endif %}
+                <ul class="list-group list-group-flush">
+                    {% for word in words %}
+                        <li class="list-group-item">
+                            <a href="{{ word.url }}">{{ word.word }}</a>
+                            {% for translation in word.translations %}
+                                <p>{{ translation.translation }}</p>
+                                {% if translation.description %}
+                                    <p>{{ translation.description }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
                     {% endfor %}
-                </li>
-        </ul>
+                </ul>
 
-        {% include 'kab_dictionary/pagination.html' %}
+                {% include 'kab_dictionary/pagination.html' %}
+            </div>
+        </div>
     </div>
 {% endblock %}

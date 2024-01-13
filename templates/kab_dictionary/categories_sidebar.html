@@ -1,26 +1,28 @@
-<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-      <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-      <span class="fs-5 fw-semibold">Категории</span>
-    </a>
-    <ul class="list-unstyled ps-0">
-        {% for child in categories_list %}
-            {% with child.children as children %}
-                {% if children %}
-                    <li class="mb-1">
-                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ child.slug }}" aria-expanded="true">
-                            {{ child.name|capfirst }}
-                        </button>
-                        {% include 'kab_dictionary/category_children.html' %}
-                    </li>
-                {% else %}
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li class="mb-1">
-                            <a href="{{ child.url }}" class="link-dark rounded">{{ child.name|capfirst }}</a>
+<div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+    <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+          <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+          <span class="fs-5 fw-semibold">Категории</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+            {% for child in categories_list %}
+                {% with child.children as children %}
+                    {% if children %}
+                        <li class="mb-0">
+                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ child.slug }}" aria-expanded="true">
+                                {{ child.name|capfirst }}
+                            </button>
+                            {% include 'kab_dictionary/category_children.html' %}
                         </li>
-                    </ul>
-                {% endif %}
-            {% endwith %}
-        {% endfor %}
-    </ul>
+                    {% else %}
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li class="mb-1">
+                                <a href="{{ child.url }}" class="link-dark rounded">{{ child.name|capfirst }}</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
 </div>
