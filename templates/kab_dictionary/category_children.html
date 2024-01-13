@@ -1,12 +1,23 @@
-<ul>
-    {% for child in children %}
-	    <li>
-            <a href="{{ child.url }}">{{ child.name }}</a>
+<div class="collapse" id="{{ child.slug }}">
+    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+        <li>
+            <a href="{{ child.url }}" class="link-dark rounded">{{ child.name|capfirst }}: общее</a>
         </li>
-        {% with child.children as children %}
-            {% if children %}
-                {% include 'kab_dictionary/category_children.html' %}
-            {% endif %}
-        {% endwith %}
-    {% endfor %}
-</ul>
+        {% for child in children %}
+            {% with child.children as children %}
+                {% if children %}
+                    <li class="mb-1">
+                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ child.slug }}" aria-expanded="true">
+                          {{ child.name|capfirst }}
+                        </button>
+                    </li>
+                    {% include 'kab_dictionary/category_children.html' %}
+                {% else %}
+                    <li>
+                        <a href="{{ child.url }}" class="link-dark rounded">{{ child.name|capfirst }}</a>
+                    </li>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+</div>

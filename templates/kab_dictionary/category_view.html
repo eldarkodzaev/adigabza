@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
-{% load mptt_tags %}
 
 {% block title %}
-    Категория :: {{ response.category }}
+    Категория: {{ category.name }}
 {% endblock %}
 
 {% block bootstrap5_content %}
     <div class="container">
         {% include 'menu.html' %}
-        <h1>Категория: {{ response.category  }}</h1>
+        <h1>Категория: {{ category.name  }}</h1>
         {% for word in words %}
-            <p><a href="{{ word.word.url }}">{{ word.word.word }}</a></p>
+            <p><a href="{{ word.url }}">{{ word.word }}</a></p>
         {% endfor %}
     </div>
 {% endblock %}

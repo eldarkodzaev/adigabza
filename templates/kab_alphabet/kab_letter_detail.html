@@ -8,13 +8,7 @@
     <div class="container">
         {% include 'menu.html' %}
         <h1>{{ letter.letter|capfirst }} {{ letter.letter }}</h1>
-        <p class="fs-3">{{ letter.id }} буква кабардино-черкесского алфавита
-        {% if letter.is_vowel %}
-            , гласная.
-        {% else %}
-            согласная.
-        {% endif %}
-        </p>
+        <p class="fs-3">{{ letter.id }} буква кабардино-черкесского алфавита{% if letter.is_vowel %}, гласная{% else %}, согласная{% endif %}.</p>
 
         {% with letter.words as words %}
             {% with words|length as words_count %}

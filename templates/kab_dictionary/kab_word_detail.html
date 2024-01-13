@@ -18,13 +18,15 @@
                     {% endif %}
                     {% if translation.categories %}
                         <span>Категории: </span>
-                        {% for category in translation.categories %}
-                            <a href="{{ category.url }}">{{ category.name }}</a>
-                        {% endfor %}
+                        <ul class="list-group list-group-horizontal">
+                            {% for category in translation.categories %}
+                                <li class="list-group-item"><a href="{{ category.url }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
-                    <p>Часть речи: {{ translation.part_of_speech.name }}</p>
+                    <p><i>Часть речи: {{ translation.part_of_speech.name }}</i></p>
                     {% if word.borrowed_from %}
-                        <p>Заимствовано из: {{ word.borrowed_from.name }}</p>
+                        <p><i>Заимствовано из: {{ word.borrowed_from.name }}</i></p>
                     {% endif %}
                 </li>
             {% endfor %}
