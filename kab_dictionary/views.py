@@ -1,17 +1,19 @@
 import requests
-from django.core.paginator import Paginator
+
+from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
 
-from django.conf import settings
 from .forms import KabWordSearchForm
-from .settings import APP_PATH, PAGINATION_PER_PAGE
+from .mixins import CategoryContextMixin, PaginatorContextMixin
+from .settings import APP_PATH
 
 
 class KabWordDetailView(TemplateView):
     """
     Отображает детальную страницу кабардино-черкесского слова
     """
+
     template_name = 'kab_dictionary/kab_word_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -21,19 +23,23 @@ class KabWordDetailView(TemplateView):
         return context
 
 
-class KabRusDictionaryView(FormMixin, TemplateView):
+class KabRusDictionaryView(CategoryContextMixin, PaginatorContextMixin, FormMixin, TemplateView):
     """
     Отображает страницу кабардино-черкесско-русского словаря
     """
+
     form_class = KabWordSearchForm
     template_name = 'kab_dictionary/main.html'
     __words = requests.get(f'{settings.API_HOST}{APP_PATH}all').json()
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        category_context = super().get_context_data(**kwargs)
+        form_context = super(PaginatorContextMixin, self).get_context_data(**kwargs)
+        context = form_context | category_context
         if word := self.request.GET.get('word'):
             response = requests.get(f'{settings.API_HOST}{APP_PATH}?word={word}')
             context['words'] = response.json()
+            context['form'] = self.form_class(initial={'word': word})
         else:
             if page := self.request.GET.get('page'):
                 response = requests.get(f'{settings.API_HOST}{APP_PATH}?page={page}')
@@ -41,15 +47,8 @@ class KabRusDictionaryView(FormMixin, TemplateView):
             else:
                 context['words'] = requests.get(f'{settings.API_HOST}{APP_PATH}?page=1').json()['results']
                 page = '1'
-            paginator = Paginator(object_list=self.__words, per_page=PAGINATION_PER_PAGE)
-            context['paginator'] = paginator
-            page_obj = paginator.get_page(page)
-            context['page_obj'] = page_obj
-            context['paginator_range'] = paginator.get_elided_page_range(page_obj.number, on_each_side=5)
-        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/')
-        response_json = response.json()
-        context['response'] = response_json
-        context['categories_list'] = response_json['results']
+            paginator_context = super(CategoryContextMixin, self).get_context_data(object_list=self.__words, page=page)
+            context |= paginator_context
         return context
 
 
@@ -57,6 +56,7 @@ class CategoryView(TemplateView):
     """
     Отображает одну категорию и слова, относящиеся к ней
     """
+
     template_name = 'kab_dictionary/category_view.html'
 
     def get_context_data(self, **kwargs):
@@ -65,7 +65,7 @@ class CategoryView(TemplateView):
         response_json = response.json()
         context['response'] = response_json
         context['category'] = response_json['category']
-        context['words'] = response_json['words']
+        context['translations'] = response_json['translations']
         return context
 
 
@@ -73,6 +73,7 @@ class CategoriesView(TemplateView):
     """
     Отображает список категорий
     """
+
     template_name = 'kab_dictionary/categories_list.html'
 
     def get_context_data(self, **kwargs):

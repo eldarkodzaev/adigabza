@@ -20,7 +20,9 @@ class KabNumeralsListView(TemplateView):
             response = requests.get(f'{API_HOST}{APP_PATH}?{urlencode(self.request.GET)}&page=1')
         context['numerals'] = response.json()
         context['numeral_form'] = NumeralForm()
-        context['numeral_range_form'] = NumeralRangeForm()
+        context['numeral_range_form'] = NumeralRangeForm(
+            initial=self.__get_initial_data_for_numeral_range_form()
+        )
         paginator = Paginator(object_list=self.numerals_list, per_page=PAGINATION_PER_PAGE)
         context['paginator'] = paginator
         page_obj = paginator.get_page(page)
@@ -39,3 +41,10 @@ class KabNumeralsListView(TemplateView):
         start = params.pop('start', None)
         end = params.pop('end', None)
         return {'start': start, 'end': end}
+    
+    def __get_initial_data_for_numeral_range_form(self) -> dict:
+        return {
+            'start': self.request.GET.get('start', 1),
+            'end': self.request.GET.get('end', 100),
+            'step': self.request.GET.get('step', 1),
+        }

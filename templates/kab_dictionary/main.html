@@ -29,13 +29,28 @@
                     {% for word in words %}
                         <li class="list-group-item">
                             <a href="{{ word.url }}">{{ word.word }}</a>
-                            {% for translation in word.translations %}
-                                <p>{{ translation.translation }}</p>
-                                {% if translation.description %}
-                                    <p>{{ translation.description }}</p>
-                                {% endif %}
-                            {% endfor %}
+                            {% if word.translations|length > 1 %}
+                                <ol>
+                                    {% for translation in word.translations %}
+                                        <li>
+                                            <p>{{ translation.translation }}</p>
+                                            {% if translation.description %}
+                                                <p>{{ translation.description }}</p>
+                                            {% endif %}                                   
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            {% else %}
+                                {% for translation in word.translations %}
+                                    <p>{{translation.translation}}</p>
+                                    {% if translation.description %}
+                                        <p>{{ translation.description }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </li>
+                    {% empty %}
+                        <p class="fs-3">По Вашему запросу ничего не найдено</p>
                     {% endfor %}
                 </ul>
 
