@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     Алфавит
 {% endblock %}
 
-{% block content %}
-    <h1>Алфавит</h1>
-    <ul>
-        {% for letter in alphabet %}
-            <li><a href="{{ letter.get_absolute_url }}">{{ letter }}</a></li>
-        {% endfor %}
-    </ul>
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1 class="text-center">Современный кабардино-черкесский алфавит</h1>
+        <div class="d-flex align-content-around flex-wrap">
+            {% for letter in alphabet.results %}
+                <div class="p-4 flex-fill">
+                    <span class="fs-1">
+                        <a href="{{ letter.url }}" style="text-decoration: none" class="{% if letter.is_vowel %}link-danger{% else %}link-dark{% endif %}">{{ letter.letter|capfirst }} {{ letter.letter }}</a>
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

@@ -1,23 +1,25 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+import requests
+from django.views.generic import TemplateView
 
-from kab_alphabet.models import KabLetter
-from kab_dictionary.models import KabWord
+from adigabza.settings import API_HOST
+from .settings import APP_PATH
 
 
-class AlphabetListView(ListView):
-    model = KabLetter
+class AlphabetListView(TemplateView):
     template_name = 'kab_alphabet/kab_alphabet_list.html'
-    context_object_name = 'alphabet'
-
-
-class LetterDetailView(DetailView):
-    model = KabLetter
-    template_name = 'kab_alphabet/kab_letter_detail.html'
-    context_object_name = 'letter'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['words_count'] = KabWord.objects.filter(letter=self.object).count()
-        context['words'] = KabWord.objects.filter(letter=self.object)
+        response = requests.get(f'{API_HOST}{APP_PATH}')
+        context['alphabet'] = response.json()
+        return context
+
+
+class LetterDetailView(TemplateView):
+    template_name = 'kab_alphabet/kab_letter_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        response = requests.get(f'{API_HOST}{APP_PATH}{context["slug"]}/')
+        context['letter'] = response.json()
         return context

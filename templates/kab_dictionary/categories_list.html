@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Категории
+{% endblock %}
+
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>Список категорий</h1>
+        <ul class="root">
+            {% for category in categories_list %}
+                <li>
+                    <a href="{{ category.url }}">{{ category.name }}</a>
+                </li>
+                {% with category.children as children %}
+                    {% if children %}
+                        {% include 'kab_dictionary/category_children.html' %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -162,6 +162,6 @@ let input = document.getElementById('id_number');
 
 input.oninput = function () {
     let number = new NumberToKab(input.value);
-    let output = document.getElementsByClassName('translate')[0];
+    let output = document.getElementsByName('translation')[0];
     output.textContent = number.translate();
 }

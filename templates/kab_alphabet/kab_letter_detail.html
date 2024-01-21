@@ -1,22 +1,28 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Буква
+    Буква "{{ letter.letter|capfirst }}"
 {% endblock %}
 
-{% block content %}
-    <h1>{{ letter }}</h1>
-    <p>{{ letter.id }} буква кабардино-черкесского алфавита</p>
-    {% if letter.is_vowel %}
-        <p>Гласная</p>
-    {% else %}
-        <p>Согласная</p>
-    {% endif %}
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>{{ letter.letter|capfirst }} {{ letter.letter }}</h1>
+        <p class="fs-3">{{ letter.id }} буква кабардино-черкесского алфавита{% if letter.is_vowel %}, гласная{% else %}, согласная{% endif %}.</p>
 
-    <h2>Слова, начинающиеся с этой буквы ({{ words_count }}):</h2>
-    <ul>
-        {% for word in words %}
-            <li>{{ word }}</li>
-        {% endfor %}
-    </ul>
+        {% with letter.words as words %}
+            {% with words|length as words_count %}
+                {% if words_count > 0 %}
+                    <h2 class="fs-2">Слова, начинающиеся с этой буквы ({{ words_count }}):</h2>
+                    <div class="d-flex align-content-around flex-wrap">
+                        {% for word in words %}
+                            <div class="p-2 flex-fill">
+                                <a href="{{ word.url }}">{{ word.word }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endwith %}
+    </div>
 {% endblock %}

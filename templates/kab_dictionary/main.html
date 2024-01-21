@@ -1,29 +1,61 @@
 {% extends 'base.html' %}
 
+{% load static %}
+{% load django_bootstrap5 %}
+
 {% block title %}
     Кабардино-черкесско-русский словарь
 {% endblock %}
 
-{% block content %}
-    <h1>Кабардино-черкесско-русский словарь</h1>
-    <h1>Адыгэ-урыс псалъалъэ</h1>
-    <form method="get">
-        {{ form.word }}
-        <input type="submit" value="Найти">
-    </form>
+{% block bootstrap5_extra_head %}
+    <link href="{% static 'css/sidebars.css' %}" rel="stylesheet">
+{% endblock %}
 
-    {% if words %}
-        <ul>
-            {% for word in words %}
-                <a href="{{ word.word.get_absolute_url }}">{{ word }}</a>
-                <p>{{ word.translation }}</p>
-                {% if word.description %}
-                    <p>{{ word.description }}</p>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>По Вашему запросу ничего не найдено</p>
-    {% endif %}
-    {% include 'kab_dictionary/pagination.html' %}
+{% block bootstrap5_content %}
+    <div class="container-fluid">
+        {% include 'menu.html' %}
+        <div class="row flex-xl-nowrap">
+            {% include 'kab_dictionary/categories_sidebar.html' %}
+            <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                <h1 class="text-center">Кабардино-черкесско-русский словарь</h1>
+                <h1 class="text-center">Адыгэ-урыс псалъалъэ</h1>
+
+                <form action="{% url 'kab_rus_dictionary:kab_rus_dictionary' %}" class="row row-cols-lg-auto align-items-center" method="get">
+                    {% bootstrap_form form layout="inline" %}
+                    {% bootstrap_button "Найти" %}
+                </form>
+
+                <ul class="list-group list-group-flush">
+                    {% for word in words %}
+                        <li class="list-group-item">
+                            <a href="{{ word.url }}">{{ word.word }}</a>
+                            {% if word.translations|length > 1 %}
+                                <ol>
+                                    {% for translation in word.translations %}
+                                        <li>
+                                            <p>{{ translation.translation }}</p>
+                                            {% if translation.description %}
+                                                <p>{{ translation.description }}</p>
+                                            {% endif %}                                   
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            {% else %}
+                                {% for translation in word.translations %}
+                                    <p>{{translation.translation}}</p>
+                                    {% if translation.description %}
+                                        <p>{{ translation.description }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <p class="fs-3">По Вашему запросу ничего не найдено</p>
+                    {% endfor %}
+                </ul>
+
+                {% include 'kab_dictionary/pagination.html' %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

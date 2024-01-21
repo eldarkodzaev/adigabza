@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Категория: {{ category.name }}
+{% endblock %}
+
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>Категория: {{ category.name  }}</h1>
+        {% if category.children %}
+            <h5>Подкатегории:</h5>
+            <ul class="list-group list-group-horizontal">
+                {% for child in category.children %}
+                    <li class="list-group-item"><a href="{{ child.url }}">{{ child.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <table class="table table-hover">
+            <tbody>
+                {% for translation in translations %}
+                    <tr>
+                        <td>{{ translation.word }}</td>
+                        <td>{{ translation.translation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

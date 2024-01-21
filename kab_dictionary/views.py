@@ -1,56 +1,85 @@
-from django.core.paginator import Page
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+import requests
+
+from django.conf import settings
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
 
-from .models import KabWord, Translation, Category
 from .forms import KabWordSearchForm
-from .paginators import DictionaryPaginator
+from .mixins import CategoryContextMixin, PaginatorContextMixin
+from .settings import APP_PATH
 
 
-class KabWordDetailView(DetailView):
-    model = KabWord
+class KabWordDetailView(TemplateView):
+    """
+    Отображает детальную страницу кабардино-черкесского слова
+    """
+
     template_name = 'kab_dictionary/kab_word_detail.html'
-    context_object_name = 'word'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['translations_list'] = self.object.translations.select_related(
-            'source', 'word__borrowed_from', 'part_of_speech')
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}{context["slug"]}/')
+        context['word'] = response.json()
         return context
 
 
-class KabRusDictionaryView(FormMixin, ListView):
-    model = KabWord
-    template_name = 'kab_dictionary/main.html'
+class KabRusDictionaryView(CategoryContextMixin, PaginatorContextMixin, FormMixin, TemplateView):
+    """
+    Отображает страницу кабардино-черкесско-русского словаря
+    """
+
     form_class = KabWordSearchForm
-    context_object_name = 'words'
-    paginator_class = DictionaryPaginator
-    paginate_by = 10
-    paginate_orphans = 3
-
-    def get_queryset(self):
-        word_param = self.request.GET.get('word')
-        if word_param:
-            return Translation.objects.select_related('word').filter(word__word__icontains=word_param)
-        return Translation.objects.select_related('word')
+    template_name = 'kab_dictionary/main.html'
+    __words = requests.get(f'{settings.API_HOST}{APP_PATH}all').json()
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        page: Page = context['page_obj']
-        context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
-        if self.object_list:
-            context['translations_count'] = self.object_list.all().count()
+        category_context = super().get_context_data(**kwargs)
+        form_context = super(PaginatorContextMixin, self).get_context_data(**kwargs)
+        context = form_context | category_context
+        if word := self.request.GET.get('word'):
+            response = requests.get(f'{settings.API_HOST}{APP_PATH}?word={word}')
+            context['words'] = response.json()
+            context['form'] = self.form_class(initial={'word': word})
+        else:
+            if page := self.request.GET.get('page'):
+                response = requests.get(f'{settings.API_HOST}{APP_PATH}?page={page}')
+                context['words'] = response.json()['results']
+            else:
+                context['words'] = requests.get(f'{settings.API_HOST}{APP_PATH}?page=1').json()['results']
+                page = '1'
+            paginator_context = super(CategoryContextMixin, self).get_context_data(object_list=self.__words, page=page)
+            context |= paginator_context
         return context
 
 
-class CategoryDetailView(DetailView):
-    model = Category
-    template_name = 'kab_dictionary/category_detail_view.html'
-    context_object_name = 'category'
+class CategoryView(TemplateView):
+    """
+    Отображает одну категорию и слова, относящиеся к ней
+    """
+
+    template_name = 'kab_dictionary/category_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['words'] = Translation.objects.filter(
-            categories__slug__contains=self.object.slug).select_related('word')
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/{context["slug"]}/')
+        response_json = response.json()
+        context['response'] = response_json
+        context['category'] = response_json['category']
+        context['translations'] = response_json['translations']
+        return context
+
+
+class CategoriesView(TemplateView):
+    """
+    Отображает список категорий
+    """
+
+    template_name = 'kab_dictionary/categories_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/')
+        response_json = response.json()
+        context['response'] = response_json
+        context['categories_list'] = response_json['results']
         return context

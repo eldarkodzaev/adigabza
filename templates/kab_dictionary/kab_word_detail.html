@@ -1,20 +1,35 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ word }}
+    {{ word.word }}
 {% endblock %}
 
-{% block content %}
-    <h1>{{ word }}</h1>
-    {% for translation in translations_list %}
-        <p>{{ translation.translation }}</p>
-        <p>{{ translation.description }}</p>
-        <span>Категории: </span>
-        {% for category in translation.categories.all %}
-            <span>{{ category }} </span>
-        {% endfor %}
-        <p>Часть речи: {{ translation.part_of_speech }}</p>
-        <p>Заимствовано из: {{ translation.word.borrowed_from.name }}</p>
-        <p>Источник: {{ translation.source.author }}, {{ translation.source.name }} {{ translation.year }} {{ translation.url }}</p>
-    {% endfor %}
+{% block bootstrap5_content %}
+    <div class="container">
+        {% include 'menu.html' %}
+        <h1>{{ word.word }}</h1>
+
+        <ul class="list-group list-group-flush">
+            {% for translation in word.translations %}
+                <li class="list-group-item">
+                    <p>{{ translation.translation }}</p>
+                    {% if translation.description %}
+                        <p> {{ translation.description }} </p>
+                    {% endif %}
+                    {% if translation.categories %}
+                        <span>Категории: </span>
+                        <ul class="list-group list-group-horizontal">
+                            {% for category in translation.categories %}
+                                <li class="list-group-item"><a href="{{ category.url }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <p><i>Часть речи: {{ translation.part_of_speech.name }}</i></p>
+                    {% if word.borrowed_from %}
+                        <p><i>Заимствовано из: {{ word.borrowed_from.name }}</i></p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
