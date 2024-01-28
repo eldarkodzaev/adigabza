@@ -1,6 +1,7 @@
 import requests
 
 from django.conf import settings
+from django.http import Http404
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
 
@@ -19,6 +20,8 @@ class KabWordDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         response = requests.get(f'{settings.API_HOST}{APP_PATH}{context["slug"]}/')
+        if response.status_code == 404:
+            raise Http404
         context['word'] = response.json()
         return context
 
@@ -62,6 +65,8 @@ class CategoryView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/{context["slug"]}/')
+        if response.status_code == 404:
+            raise Http404
         response_json = response.json()
         context['response'] = response_json
         context['category'] = response_json['category']

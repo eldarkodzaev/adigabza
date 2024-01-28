@@ -19,7 +19,6 @@ from django.urls import path, include
 from .views import MainPageView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', MainPageView.as_view(), name='main'),
     path('numerals/', include('kab_numerals.urls')),
     path('kab-alphabet/', include('kab_alphabet.urls', namespace='kab_alphabet')),
