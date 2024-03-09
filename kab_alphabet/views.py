@@ -3,7 +3,7 @@ import requests
 from django.http import Http404
 from django.views.generic import TemplateView
 
-from adigabza.settings import API_HOST
+from adigabza.settings.base import API_HOST
 from .settings import APP_PATH
 
 

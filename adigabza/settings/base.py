@@ -16,13 +16,11 @@ from pathlib import Path
 from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Take environment variables from .env file
-env = Env(
-    DEBUG=(bool, False),
-)
+env = Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
@@ -31,13 +29,6 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
-
-if not DEBUG:
-    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
-
 
 # Application definition
 
@@ -52,18 +43,12 @@ INSTALLED_APPS = [
     'kab_dictionary.apps.KabDictionaryConfig',
 ]
 
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'adigabza.urls'
 
@@ -108,3 +93,54 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 API_HOST = env('API_HOST')
+
+
+# Logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "warnings_and_errors.log"
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
