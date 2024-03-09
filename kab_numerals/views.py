@@ -4,7 +4,7 @@ import requests
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
 
-from adigabza.settings import API_HOST
+from adigabza.settings.base import API_HOST
 from .forms import NumeralForm, NumeralRangeForm
 from .settings import APP_PATH, PAGINATION_PER_PAGE
 
