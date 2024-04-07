@@ -13,8 +13,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/adigabza/wheels -r requirements.txt
+COPY ./requirements/prod.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/adigabza/wheels -r prod.txt
 
 #########
 # FINAL #
@@ -38,7 +38,7 @@ WORKDIR $ADIGABZA_HOME
 # install dependencies
 RUN apk update && apk add libpq
 COPY --from=builder /usr/src/adigabza/wheels /wheels
-COPY --from=builder /usr/src/adigabza/requirements.txt .
+COPY --from=builder /usr/src/adigabza/prod.txt .
 RUN pip install --no-cache /wheels/*
 
 # copy project

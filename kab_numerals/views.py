@@ -10,14 +10,21 @@ from .settings import APP_PATH, PAGINATION_PER_PAGE
 
 
 class KabNumeralsListView(TemplateView):
+    """
+    Отображает страницу со списком числительных
+    """
     template_name = 'kab_numerals/kab_numerals_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if page := self.request.GET.get('page'):
-            response = requests.get(f'{API_HOST}{APP_PATH}?{urlencode(self.request.GET)}&page={page}')
+            response = requests.get(
+                f'{API_HOST}{APP_PATH}?{urlencode(self.request.GET)}&page={page}', timeout=3.05
+            )
         else:
-            response = requests.get(f'{API_HOST}{APP_PATH}?{urlencode(self.request.GET)}&page=1')
+            response = requests.get(
+                f'{API_HOST}{APP_PATH}?{urlencode(self.request.GET)}&page=1', timeout=3.05
+            )
         context['numerals'] = response.json()
         context['numeral_form'] = NumeralForm()
         context['numeral_range_form'] = NumeralRangeForm(
@@ -34,7 +41,7 @@ class KabNumeralsListView(TemplateView):
     def numerals_list(self):
         get_params = dict(self.request.GET)
         get_params.pop('page', None)
-        return requests.get(f'{API_HOST}{APP_PATH}?{urlencode(get_params, doseq=True)}').json()
+        return requests.get(f'{API_HOST}{APP_PATH}?{urlencode(get_params, doseq=True)}', timeout=3.05).json()
 
     def get_params(self) -> dict:
         params = dict(self.request.GET)
