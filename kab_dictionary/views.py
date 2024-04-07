@@ -19,7 +19,7 @@ class KabWordDetailView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        response = requests.get(f'{settings.API_HOST}{APP_PATH}{context["slug"]}/')
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}{context["slug"]}/', timeout=3.05)
         if response.status_code == 404:
             raise Http404
         context['word'] = response.json()
@@ -33,22 +33,22 @@ class KabRusDictionaryView(CategoryContextMixin, PaginatorContextMixin, FormMixi
 
     form_class = KabWordSearchForm
     template_name = 'kab_dictionary/main.html'
-    __words = requests.get(f'{settings.API_HOST}{APP_PATH}all').json()
+    __words = requests.get(f'{settings.API_HOST}{APP_PATH}all', timeout=3.05).json()
 
     def get_context_data(self, **kwargs):
         category_context = super().get_context_data(**kwargs)
         form_context = super(PaginatorContextMixin, self).get_context_data(**kwargs)
         context = form_context | category_context
         if word := self.request.GET.get('word'):
-            response = requests.get(f'{settings.API_HOST}{APP_PATH}?word={word}')
+            response = requests.get(f'{settings.API_HOST}{APP_PATH}?word={word}', timeout=3.05)
             context['words'] = response.json()
             context['form'] = self.form_class(initial={'word': word})
         else:
             if page := self.request.GET.get('page'):
-                response = requests.get(f'{settings.API_HOST}{APP_PATH}?page={page}')
+                response = requests.get(f'{settings.API_HOST}{APP_PATH}?page={page}', timeout=3.05)
                 context['words'] = response.json()['results']
             else:
-                context['words'] = requests.get(f'{settings.API_HOST}{APP_PATH}?page=1').json()['results']
+                context['words'] = requests.get(f'{settings.API_HOST}{APP_PATH}?page=1', timeout=3.05).json()['results']
                 page = '1'
             paginator_context = super(CategoryContextMixin, self).get_context_data(object_list=self.__words, page=page)
             context |= paginator_context
@@ -64,7 +64,7 @@ class CategoryView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/{context["slug"]}/')
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/{context["slug"]}/', timeout=3.05)
         if response.status_code == 404:
             raise Http404
         response_json = response.json()
@@ -83,7 +83,7 @@ class CategoriesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/')
+        response = requests.get(f'{settings.API_HOST}{APP_PATH}categories/', timeout=3.05)
         response_json = response.json()
         context['response'] = response_json
         context['categories_list'] = response_json['results']
