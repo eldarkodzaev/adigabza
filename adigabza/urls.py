@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
+from django.conf import settings
 from .views import MainPageView
 
 urlpatterns = [
@@ -22,5 +23,7 @@ urlpatterns = [
     path('numerals/', include('kab_numerals.urls')),
     path('kab-alphabet/', include('kab_alphabet.urls', namespace='kab_alphabet')),
     path('kab-rus-dictionary/', include('kab_dictionary.urls', namespace='kab_rus_dictionary')),
-    path('__debug__/', include('debug_toolbar.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
